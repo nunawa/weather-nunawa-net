@@ -19,8 +19,8 @@ const Circles = () => {
     const pallet = chroma.scale(["lightskyblue", "springgreen", "yellow", "salmon", "crimson"])
                         .mode("lch").colors(7);
 
-    console.log(wbgtList);
-    console.log(pallet);
+    //console.log(wbgtList);
+    //console.log(pallet);
 
     let compoList = [];
 
