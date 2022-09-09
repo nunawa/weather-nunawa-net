@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "全国の暑さ指数一覧",
+  "name": "全国の暑さ指数一覧",
   "icons": [
     {
       "src": "favicon.ico",
