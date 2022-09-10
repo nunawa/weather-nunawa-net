@@ -16,7 +16,8 @@ function App() {
             <>
               <Navbars/>
               <Container className='w-80 mt-3'>
-                全国の2021年平均値
+                全国の年間平均値<br/>
+                （2017～2021年平均）
                 <p className='text-muted'>
                   各マーカーをクリックし、リンクからそれぞれの地点の詳細データが閲覧できます。
                 </p>

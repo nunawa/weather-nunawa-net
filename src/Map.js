@@ -1,18 +1,16 @@
 import React from 'react';
 import { MapContainer, TileLayer, Popup, Circle } from 'react-leaflet'
 import './Map.css';
-import Data from './ave_wbgt.json'
+import Data from './5y_wbgt.json'
 import chroma from "chroma-js";
 import { Link } from "react-router-dom";
 
 // npm start
 
 const Circles = () => {
-    let wbgtList = [];
-
-    for (const iter of Data) {
-        const aveWbgt = (Number(iter["4"]) + Number(iter["5"]) + Number(iter["6"]) + Number(iter["7"]) + Number(iter["8"]) + Number(iter["9"]) + Number(iter["10"])) / 7;
-        wbgtList.push(aveWbgt)
+    let wbgtList = []
+    for (const id in Data) {
+        wbgtList.push(Data[id]["ave"])
     }
 
     const limits = chroma.limits(wbgtList, "e", 6);
@@ -24,12 +22,11 @@ const Circles = () => {
 
     let compoList = [];
 
-    for (let i = 0; i < Data.length; i++) {
-        const lat = Number(Data[i]["lat"]);
-        const lon = Number(Data[i]["lon"]);
-        const name = Data[i]["name"];
-        const id = Data[i]["id"];
-        const wbgt = wbgtList[i];
+    for (const id in Data) {
+        const lat = Data[id]["lat"];
+        const lon = Data[id]["lon"];
+        const name = Data[id]["name"];
+        const wbgt = Data[id]["ave"];
         
         let circleColor = "#FFFFF";
         if (wbgt < limits[0]) {
