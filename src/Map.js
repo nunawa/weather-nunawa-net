@@ -1,5 +1,5 @@
 import React from 'react';
-import { MapContainer, TileLayer, Popup, Circle } from 'react-leaflet'
+import { MapContainer, TileLayer, Popup, Circle, useMap, useMapEvent } from 'react-leaflet'
 import './Map.css';
 import Data from './5y_wbgt.json'
 import chroma from "chroma-js";
@@ -69,14 +69,28 @@ const Circles = () => {
     )
 };
 
+let coord = [37.45805555, 137.63361111];
+let zoom = 5;
+
+function WrapUseMap() {
+    const map = useMap()
+    useMapEvent("moveend", () => {
+        coord = map.getCenter();
+        zoom = map.getZoom();
+    });
+
+    return null
+}
+
 export const Map = () => {
-  return (
-    <MapContainer center={[37.45805555, 137.63361111]} zoom={5}>
-        <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        <Circles></Circles>
-    </MapContainer>
-  )
+    return (
+        <MapContainer center={coord} zoom={zoom}>
+            <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            <Circles></Circles>
+            <WrapUseMap/>
+        </MapContainer>
+    );
 };
