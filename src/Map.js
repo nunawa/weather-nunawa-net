@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Popup, Circle } from 'react-leaflet'
 import './Map.css';
 import Data from './ave_wbgt.json'
 import chroma from "chroma-js";
+import { Link } from "react-router-dom";
 
 // npm start
 
@@ -15,7 +16,8 @@ const Circles = () => {
     }
 
     const limits = chroma.limits(wbgtList, "e", 6);
-    const pallet = chroma.scale(["lightskyblue", "yellow", "salmon", "crimson", "darkmagenta"]).mode("hsl").colors(7);
+    const pallet = chroma.scale(["lightskyblue", "springgreen", "yellow", "salmon", "crimson"])
+                        .mode("lch").colors(7);
 
     console.log(wbgtList);
     console.log(pallet);
@@ -26,6 +28,7 @@ const Circles = () => {
         const lat = Number(Data[i]["lat"]);
         const lon = Number(Data[i]["lon"]);
         const name = Data[i]["name"];
+        const id = Data[i]["id"];
         const wbgt = wbgtList[i];
         
         let circleColor = "#FFFFF";
@@ -51,12 +54,13 @@ const Circles = () => {
             circleColor = pallet[6];
         }
 
-        console.log(circleColor);
-
         compoList.push(
             <Circle center={[lat, lon]} radius={3000} color={circleColor}>
                 <Popup>
-                    {name}<br/>
+                    <Link to={{
+                        pathname: "/data",
+                        search: "?q=" + id
+                    }}>{name}</Link><br/>
                     {String(Math.round(wbgt * 100)/100)}
                 </Popup>
             </Circle>
@@ -70,7 +74,7 @@ const Circles = () => {
 
 export const Map = () => {
   return (
-    <MapContainer center={[35.68944, 139.69167]} zoom={9}>
+    <MapContainer center={[37.45805555, 137.63361111]} zoom={5}>
         <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
