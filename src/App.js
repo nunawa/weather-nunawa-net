@@ -1,22 +1,38 @@
 import './App.css';
 import 'leaflet/dist/leaflet.css';
 import { Map } from "./Map";
+import { About } from "./About";
+import { Data } from "./Data";
+import { Navbars } from "./Navbars";
 import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
   return (
     <div className="App">
-      <Navbar bg='light'>
-        <Container>
-          <Navbar.Brand href=''>全国の暑さ指数一覧</Navbar.Brand>
-          <Nav.Link className='justify-content-end'>About</Nav.Link>
-        </Container>
-      </Navbar>
-      <Container className='w-75 mt-3'>
-        <Map />
-      </Container>
+      <Router>
+        <Routes>
+          <Route path="/" element={
+            <>
+              <Navbars/>
+              <Container className='w-80 mt-3'>
+                全国の2021年平均値
+                <p className='text-muted'>
+                  各マーカーをクリックし、リンクからそれぞれの地点の詳細データが閲覧できます。
+                </p>
+              </Container>
+              <Container className='w-80 mt-3'>
+                <Map/>
+              </Container>
+              <Container bg="gray-500" className='w-80 mt-3'>
+                &copy; <a href='https://github.com/nunawa'>Nunawa</a>
+              </Container>
+            </>
+          }/>
+          <Route path="/about" element={<About/>}/>
+          <Route path="/data" element={<Data/>}/>
+        </Routes>
+      </Router>
     </div>
   );
 }
