@@ -1,24 +1,34 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import { Navbars } from "./Navbars";
 import { useSearchParams } from "react-router-dom";
-import WbgtData from "./5y_wbgt.json";
 import { LineChart, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, Line, ReferenceArea, Label } from "recharts"
+import axios from 'axios';
 
 export const Data = () => {
     const [param] = useSearchParams();
     const id = param.get("q");
 
+    const [wbgt, setWbgt] = useState([]);
+
+    useEffect(() => {
+        axios.get("/.netlify/functions/get-daily-wbgt?q=" + id)
+        .then(r => {
+            setWbgt(r.data[0])
+        })
+        .catch(e => console.log(e));
+    }, [id]);
+
     return (
     <>
         <Navbars/>
         <Container className='w-80 mt-3'>
-            {WbgtData[id]["pref"]} {WbgtData[id]["name"]}<br/>
+            {wbgt.pref} {wbgt.name}<br/>
             毎日の最高値・最低値の推移<br/>
             （2017～2021年平均）
             <ResponsiveContainer width="100%" height={400}>
                 <LineChart
-                    data={WbgtData[id]["max_min"]}
+                    data={wbgt.max_min}
                     margin={{ left: 0 }}
                 >
                     <CartesianGrid strokeDasharray="3 3" />

@@ -1,73 +1,83 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Popup, Circle, useMap, useMapEvent } from 'react-leaflet'
 import './Map.css';
-import Data from './5y_wbgt.json'
+//import Data from './5y_wbgt.json'
 import chroma from "chroma-js";
 import { Link } from "react-router-dom";
+import axios from 'axios';
 
 // npm start
 
 const Circles = () => {
-    let wbgtList = []
-    for (const id in Data) {
-        wbgtList.push(Data[id]["ave"])
-    }
+    const [compoList, setCompoList] = useState([]);
 
-    const limits = chroma.limits(wbgtList, "e", 6);
-    const pallet = chroma.scale(["lightskyblue", "springgreen", "yellow", "salmon", "crimson"])
-                        .mode("lch").colors(7);
+    useEffect(() => {
+        axios.get("/.netlify/functions/get-yearly-wbgt")
+        .then(r => {
+            setCompoList(getCompoList(r.data));
+        })
+        .catch(e => console.log(e));
+    }, []);
 
-    //console.log(wbgtList);
-    //console.log(pallet);
+    const getCompoList = (data) => {
+        const wbgtList = data.map(elem => elem.ave);
 
-    let compoList = [];
+        const limits = chroma.limits(wbgtList, "e", 6);
+        const pallet = chroma.scale(["lightskyblue", "springgreen", "yellow", "salmon", "crimson"])
+                            .mode("lch").colors(7);
 
-    for (const id in Data) {
-        const lat = Data[id]["lat"];
-        const lon = Data[id]["lon"];
-        const name = Data[id]["name"];
-        const wbgt = Data[id]["ave"];
-        
-        let circleColor = "#FFFFF";
-        if (wbgt < limits[0]) {
-            circleColor = pallet[0];
+        let compoList = [];
+
+        for (const elem of data) {
+            const id = elem.id
+            const lat = elem.lat;
+            const lon = elem.lon;
+            const name = elem.name;
+            const wbgt = elem.ave;
             
-        } else if (limits[0] <= wbgt && wbgt < limits[1]){
-            circleColor = pallet[1];
+            let circleColor = "#FFFFF";
+            if (wbgt < limits[0]) {
+                circleColor = pallet[0];
+                
+            } else if (limits[0] <= wbgt && wbgt < limits[1]){
+                circleColor = pallet[1];
 
-        } else if (limits[1] <= wbgt && wbgt< limits[2]) {
-            circleColor = pallet[2];
+            } else if (limits[1] <= wbgt && wbgt< limits[2]) {
+                circleColor = pallet[2];
 
-        } else if (limits[2] <= wbgt && wbgt < limits[3]) {
-            circleColor = pallet[3];
+            } else if (limits[2] <= wbgt && wbgt < limits[3]) {
+                circleColor = pallet[3];
 
-        } else if (limits[3] <= wbgt && wbgt < limits[4]) {
-            circleColor = pallet[4];
+            } else if (limits[3] <= wbgt && wbgt < limits[4]) {
+                circleColor = pallet[4];
 
-        } else if (limits[4] <= wbgt && wbgt < limits[5]) {
-            circleColor = pallet[5];
+            } else if (limits[4] <= wbgt && wbgt < limits[5]) {
+                circleColor = pallet[5];
 
-        } else if (limits[5] <= wbgt) {
-            circleColor = pallet[6];
-        }
+            } else if (limits[5] <= wbgt) {
+                circleColor = pallet[6];
+            }
 
-        compoList.push(
-            <Circle center={[lat, lon]} radius={3000} color={circleColor}>
-                <Popup>
-                    <Link to={{
-                        pathname: "/data",
-                        search: "?q=" + id
-                    }}>{name}</Link><br/>
-                    {String(Math.round(wbgt * 100)/100)}
-                </Popup>
-            </Circle>
-        )
+            compoList.push(
+                <Circle center={[lat, lon]} radius={3000} color={circleColor}>
+                    <Popup>
+                        <Link to={{
+                            pathname: "/data",
+                            search: "?q=" + id
+                        }}>{name}</Link><br/>
+                        {String(wbgt)}
+                    </Popup>
+                </Circle>
+            );    
+        };
+
+        return compoList;
     }
 
     return (
         <div>{compoList}</div>
-    )
-};
+    );
+}
 
 let coord = [37.45805555, 137.63361111];
 let zoom = 5;
@@ -79,7 +89,7 @@ function WrapUseMap() {
         zoom = map.getZoom();
     });
 
-    return null
+    return null;
 }
 
 export const Map = () => {
