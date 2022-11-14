@@ -25,6 +25,7 @@
     "recharts": "^2.1.16"
   },
   "devDependencies": {
+    "@netlify/plugin-nextjs": "^4.29.1",
     "cross-env": "^7.0.3"
   },
   "resolutions": {
