@@ -50,14 +50,7 @@ const getCompoList = (data) => {
     compoList.push(
       <Circle center={[lat, lon]} radius={3000} color={circleColor} key={id}>
         <Popup>
-          <Link
-            href={{
-              pathname: "/data",
-              search: "?q=" + id,
-            }}
-          >
-            {name}
-          </Link>
+          <Link href={"/data/" + id}>{name}</Link>
           <br />
           {String(wbgt)}
         </Popup>

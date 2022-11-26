@@ -1,6 +1,6 @@
 import React from "react";
 import Container from "react-bootstrap/Container";
-import { Navbars } from "../components/Navbars";
+import { Navbars } from "../../components/Navbars";
 import {
   LineChart,
   CartesianGrid,
@@ -19,13 +19,13 @@ export const Data = ({ data }) => {
     <>
       <Navbars />
       <Container className="w-80 mt-3">
-        {data[0].pref} {data[0].name}
+        {data.pref} {data.name}
         <br />
         毎日の最高値・最低値の推移
         <br />
         （2017～2021年平均）
         <ResponsiveContainer width="100%" height={400}>
-          <LineChart data={data[0].max_min} margin={{ left: 0 }}>
+          <LineChart data={data.max_min} margin={{ left: 0 }}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="date" />
             <YAxis width={30} />
@@ -85,8 +85,34 @@ export const Data = ({ data }) => {
   );
 };
 
-export const getServerSideProps = async (context) => {
-  const id = context.query.q;
+export const getStaticPaths = async () => {
+  const client = await MongoClient.connect(process.env.CONNECTIONSTRING, {
+    useUnifiedTopology: true,
+  });
+
+  try {
+    const ids = await client
+      .db("weather")
+      .collection("wbgt")
+      .find({}, { projection: { _id: 0, id: 1 } })
+      .toArray();
+    client.close();
+
+    const pathArray = ids.map((elem) => ({
+      params: elem,
+    }));
+
+    return {
+      paths: pathArray,
+      fallback: false,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getStaticProps = async (context) => {
+  const id = context.params.id;
   const client = await MongoClient.connect(process.env.CONNECTIONSTRING, {
     useUnifiedTopology: true,
   });
@@ -95,8 +121,7 @@ export const getServerSideProps = async (context) => {
     const data = await client
       .db("weather")
       .collection("wbgt")
-      .find({ id: id }, { projection: { _id: 0, dist: 0, ave: 0 } })
-      .toArray();
+      .findOne({ id: id }, { projection: { _id: 0, dist: 0, ave: 0 } });
     client.close();
 
     return {
