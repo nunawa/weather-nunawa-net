@@ -18,7 +18,7 @@ export const Data = ({ data }) => {
   return (
     <>
       <Navbars />
-      <Container className="w-80 mt-3">
+      <Container className="px-4 mt-3">
         {data.pref} {data.name}
         <br />
         毎日の最高値・最低値の推移
@@ -78,7 +78,7 @@ export const Data = ({ data }) => {
           </LineChart>
         </ResponsiveContainer>
       </Container>
-      <Container bg="gray-500" className="w-80 mt-5">
+      <Container className="my-3">
         &copy; <a href="https://github.com/nunawa">Nunawa</a>
       </Container>
     </>

@@ -9,7 +9,7 @@ export default function Home({ data }) {
   return (
     <div className="Home">
       <Navbars />
-      <Container className="w-80 mt-3">
+      <Container className="w-75 mt-3">
         全国の年間平均値
         <br />
         （2017～2021年平均）
@@ -17,10 +17,10 @@ export default function Home({ data }) {
           各マーカーをクリックし、リンクからそれぞれの地点の詳細データが閲覧できます。
         </p>
       </Container>
-      <Container className="w-80 mt-3">
+      <Container className="px-4 mt-3">
         <Map>{data}</Map>
       </Container>
-      <Container bg="gray-500" className="w-80 mt-3">
+      <Container className="my-3">
         &copy; <a href="https://github.com/nunawa">Nunawa</a>
       </Container>
     </div>
