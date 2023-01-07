@@ -40,6 +40,14 @@ export default function Document() {
           property="og:image"
           content="https://weather.nunawa.net/android-chrome-512x512.png"
         />
+        <meta
+          name="google-site-verification"
+          content="07X984s8f0c8OR7SRbdmCCOTP49L3GzyoOBsxtwSLrM"
+        />
+        <meta
+          name="google-site-verification"
+          content="a9Jekfvar8guFfeGaF5pwCse4vlBtAoOBW5isIHAA4g"
+        />
       </Head>
       <body>
         <Main />
