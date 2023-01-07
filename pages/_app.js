@@ -9,8 +9,8 @@ function MyApp({ Component, pageProps }) {
     <>
       <Head>
         <title>全国の暑さ指数一覧</title>
+        <GoogleAnalytics trackPageViews />
       </Head>
-      <GoogleAnalytics trackPageViews />
       <Component {...pageProps} />
     </>
   );
