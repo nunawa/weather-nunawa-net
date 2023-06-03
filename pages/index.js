@@ -1,107 +1,138 @@
 import React from "react";
 import { Navbars } from "../components/Navbars";
-import { Container } from "react-bootstrap";
+import { Col, Container, Row, Table } from "react-bootstrap";
 import { MongoClient } from "mongodb";
-import dynamic from "next/dynamic";
-import { DeckGL } from "deck.gl";
-import { ColumnLayer, BitmapLayer } from "@deck.gl/layers";
-import { TileLayer } from "@deck.gl/geo-layers";
 import { CommonHead } from "../components/CommonHead";
-const Map = dynamic(() => import("../components/Map"), { ssr: false });
+import Link from "next/link";
 
-export default function Home({ wbgt, temp, rainfall }) {
-  const layer = new ColumnLayer({
-    data: rainfall,
-    diskResolution: 12,
-    radius: 5000,
-    extruded: true,
-    pickable: true,
-    elevationScale: 20,
-    getPosition: (d) => [d.lon, d.lat],
-    getFillColor: (d) => [
-      Math.floor(d.ave / 15),
-      30,
-      255 - Math.floor(d.ave / 15),
-      255,
-    ],
-    getLineColor: [0, 0, 0],
-    getElevation: (d) => d.ave,
-  });
+export default function Home({
+  wbgtAsc,
+  wbgtDesc,
+  tempAsc,
+  tempDesc,
+  rainfallAsc,
+  rainfallDesc,
+}) {
+  const RankingTable = ({ children, type }) => {
+    const tr = children.map(({ id, pref, name, ave }, i) => {
+      return (
+        <tr key={i}>
+          <th className="fw-normal">{i + 1}</th>
+          <th className="fw-normal">{pref}</th>
+          <th className="fw-normal">
+            <Link href={"/data/" + id}>{name}</Link>
+          </th>
+          <th className="fw-normal">{ave}</th>
+        </tr>
+      );
+    });
 
-  const tile = new TileLayer({
-    data: "https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png",
-
-    minZoom: 0,
-    maxZoom: 19,
-    tileSize: 256,
-
-    renderSubLayers: (props) => {
-      const {
-        bbox: { west, south, east, north },
-      } = props.tile;
-
-      return new BitmapLayer(props, {
-        data: null,
-        image: props.data,
-        bounds: [west, south, east, north],
-      });
-    },
-  });
+    return (
+      <Table striped bordered hover className="text-start">
+        <thead>
+          <tr>
+            <th className="fw-normal">順位</th>
+            <th className="fw-normal">地域</th>
+            <th className="fw-normal">地点名</th>
+            <th className="fw-normal">{type}</th>
+          </tr>
+        </thead>
+        <tbody>{tr}</tbody>
+      </Table>
+    );
+  };
 
   return (
     <div className="Home">
       <CommonHead title="全国の暑さ指数一覧" />
       <Navbars />
 
-      <Container className="w-75 mt-4">
-        全国の暑さ指数 年間平均値
-        <br />
+      <Container className="mt-4">
+        <h5>
+          全国の暑さ指数 年間平均値
+          <br />
+          TOP5
+        </h5>
         （2017～2021年平均）
-        <div className="text-muted">
-          各マーカーをクリックし、リンクからそれぞれの地点の詳細データが閲覧できます。
-        </div>
-      </Container>
-      <Container className="px-4">
-        <Map>{wbgt}</Map>
-      </Container>
-      <Container className="w-75 mt-4">
-        全国の年平均気温
         <br />
+        <Row>
+          <Col
+            lg
+            className="mx-auto me-xl-1 me-xxl-1"
+            style={{ maxWidth: "500px" }}
+          >
+            <h6>高い順</h6>
+            <RankingTable type="暑さ指数（℃）">{wbgtDesc}</RankingTable>
+          </Col>
+          <Col
+            lg
+            className="mx-auto ms-xl-1 ms-xxl-1"
+            style={{ maxWidth: "500px" }}
+          >
+            <h6>低い順</h6>
+            <RankingTable type="暑さ指数（℃）">{wbgtAsc}</RankingTable>
+          </Col>
+        </Row>
+        <Link href="/wbgt">もっと見る</Link>
+      </Container>
+
+      <Container className="mt-5">
+        <h5>
+          全国の年平均気温 <br />
+          TOP5
+        </h5>
         （1991～2020年平年値）
-        <div className="text-muted">
-          各マーカーをクリックし、リンクからそれぞれの地点の詳細データが閲覧できます。
-        </div>
-      </Container>
-      <Container className="px-4">
-        <Map>{temp}</Map>
-      </Container>
-      <Container className="w-75 mt-4">
-        全国の年降水量
         <br />
+        <Row>
+          <Col
+            lg
+            className="mx-auto me-xl-1 me-xxl-1"
+            style={{ maxWidth: "500px" }}
+          >
+            <h6>高い順</h6>
+            <RankingTable type="気温（℃）">{tempDesc}</RankingTable>
+          </Col>
+          <Col
+            lg
+            className="mx-auto ms-xl-1 ms-xxl-1"
+            style={{ maxWidth: "500px" }}
+          >
+            <h6>低い順</h6>
+            <RankingTable type="気温（℃）">{tempAsc}</RankingTable>
+          </Col>
+        </Row>
+        <Link href="/temperature">もっと見る</Link>
+      </Container>
+
+      <Container className="mt-5">
+        <h5>
+          全国の年降水量 <br />
+          TOP5
+        </h5>
         （1991～2020年平年値）
-        <div className="text-muted">
-          Shift+ドラッグもしくはCtrl+ドラッグで回転できます。
-        </div>
+        <br />
+        <Row>
+          <Col
+            lg
+            className="mx-auto me-xl-1 me-xxl-1"
+            style={{ maxWidth: "500px" }}
+          >
+            <h6>高い順</h6>
+            <RankingTable type="降水量（mm）">{rainfallDesc}</RankingTable>
+          </Col>
+          <Col
+            lg
+            className="mx-auto ms-xl-1 ms-xxl-1"
+            style={{ maxWidth: "500px" }}
+          >
+            <h6>低い順</h6>
+            <RankingTable type="降水量（mm）">{rainfallAsc}</RankingTable>
+          </Col>
+        </Row>
+        <Link href="/rainfall">もっと見る</Link>
       </Container>
-      <Container className="px-4">
-        <DeckGL
-          style={{ position: "relative", height: "70vh" }}
-          initialViewState={{
-            longitude: 135,
-            latitude: 35,
-            zoom: 5,
-            maxZoom: 19,
-            pitch: 70,
-            bearing: 20,
-          }}
-          layers={[tile, layer]}
-          getTooltip={({ object }) =>
-            object && `${object.name}\n ${object.ave}mm`
-          }
-          controller={{ touchRotate: true }}
-        />
-      </Container>
-      <Container className="my-3">
+
+      <Container className="mt-5 mb-3">
         &copy; <a href="https://github.com/nunawa">Nunawa</a>
       </Container>
     </div>
@@ -114,16 +145,45 @@ export async function getStaticProps() {
   });
 
   try {
-    const wbgt = await client
+    const wbgtAsc = await client
       .db("weather")
       .collection("wbgt")
       .find(
         {},
-        { projection: { _id: 0, id: 1, name: 1, lat: 1, lon: 1, ave: 1 } }
+        {
+          projection: {
+            _id: 0,
+            id: 1,
+            pref: 1,
+            name: 1,
+            ave: 1,
+          },
+        }
       )
+      .sort({ ave: 1 })
+      .limit(5)
       .toArray();
 
-    const temp = await client
+    const wbgtDesc = await client
+      .db("weather")
+      .collection("wbgt")
+      .find(
+        {},
+        {
+          projection: {
+            _id: 0,
+            id: 1,
+            pref: 1,
+            name: 1,
+            ave: 1,
+          },
+        }
+      )
+      .sort({ ave: -1 })
+      .limit(5)
+      .toArray();
+
+    const tempAsc = await client
       .db("weather")
       .collection("amedas")
       .find(
@@ -132,16 +192,36 @@ export async function getStaticProps() {
           projection: {
             _id: 0,
             id: 1,
+            pref: 1,
             name: 1,
-            lat: 1,
-            lon: 1,
             yearly: { temp: 1 },
           },
         }
       )
+      .sort({ "yearly.temp": 1 })
+      .limit(5)
       .toArray();
 
-    const rainfall = await client
+    const tempDesc = await client
+      .db("weather")
+      .collection("amedas")
+      .find(
+        { "yearly.temp": { $ne: null }, id: { $ne: "50066" } },
+        {
+          projection: {
+            _id: 0,
+            id: 1,
+            pref: 1,
+            name: 1,
+            yearly: { temp: 1 },
+          },
+        }
+      )
+      .sort({ "yearly.temp": -1 })
+      .limit(5)
+      .toArray();
+
+    const rainfallAsc = await client
       .db("weather")
       .collection("amedas")
       .find(
@@ -150,28 +230,66 @@ export async function getStaticProps() {
           projection: {
             _id: 0,
             id: 1,
+            pref: 1,
             name: 1,
-            lat: 1,
-            lon: 1,
             yearly: { rainfall: 1 },
           },
         }
       )
+      .sort({ "yearly.rainfall": 1 })
+      .limit(5)
       .toArray();
+
+    const rainfallDesc = await client
+      .db("weather")
+      .collection("amedas")
+      .find(
+        { "yearly.rainfall": { $ne: null } },
+        {
+          projection: {
+            _id: 0,
+            id: 1,
+            pref: 1,
+            name: 1,
+            yearly: { rainfall: 1 },
+          },
+        }
+      )
+      .sort({ "yearly.rainfall": -1 })
+      .limit(5)
+      .toArray();
+
     client.close();
 
-    temp.map((elem) => {
+    tempAsc.map((elem) => {
       elem.ave = elem.yearly.temp;
       delete elem.yearly;
     });
 
-    rainfall.map((elem) => {
+    tempDesc.map((elem) => {
+      elem.ave = elem.yearly.temp;
+      delete elem.yearly;
+    });
+
+    rainfallAsc.map((elem) => {
+      elem.ave = elem.yearly.rainfall;
+      delete elem.yearly;
+    });
+
+    rainfallDesc.map((elem) => {
       elem.ave = elem.yearly.rainfall;
       delete elem.yearly;
     });
 
     return {
-      props: { wbgt, temp, rainfall },
+      props: {
+        wbgtAsc,
+        wbgtDesc,
+        tempAsc,
+        tempDesc,
+        rainfallAsc,
+        rainfallDesc,
+      },
     };
   } catch (err) {
     console.log(err);
