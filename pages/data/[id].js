@@ -16,6 +16,7 @@ import {
   Legend,
 } from "recharts";
 import { MongoClient } from "mongodb";
+import { CommonHead } from "../../components/CommonHead";
 
 const WbgtChart = (wbgt) => {
   let returnComponent = <></>;
@@ -165,8 +166,10 @@ const AmedasChart = (amedas) => {
 };
 
 export const Data = ({ wbgt, amedas }) => {
+  const title = `${amedas.pref} ${amedas.name}のデータ - 全国の暑さ指数一覧`;
   return (
     <>
+      <CommonHead title={title} />
       <Navbars />
       <WbgtChart>{wbgt}</WbgtChart>
       <AmedasChart>{amedas}</AmedasChart>

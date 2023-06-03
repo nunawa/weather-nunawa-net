@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import { DeckGL } from "deck.gl";
 import { ColumnLayer, BitmapLayer } from "@deck.gl/layers";
 import { TileLayer } from "@deck.gl/geo-layers";
+import { CommonHead } from "../components/CommonHead";
 const Map = dynamic(() => import("../components/Map"), { ssr: false });
 
 export default function Home({ wbgt, temp, rainfall }) {
@@ -49,6 +50,7 @@ export default function Home({ wbgt, temp, rainfall }) {
 
   return (
     <div className="Home">
+      <CommonHead title="全国の暑さ指数一覧" />
       <Navbars />
 
       <Container className="w-75 mt-4">
