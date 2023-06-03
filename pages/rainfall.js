@@ -4,6 +4,7 @@ import { DeckGL } from "deck.gl";
 import { MongoClient } from "mongodb";
 import Container from "react-bootstrap/Container";
 import { Navbars } from "../components/Navbars";
+import { CommonHead } from "../components/CommonHead";
 
 export default function Rainfall({ rainfall }) {
   const layer = new ColumnLayer({
@@ -45,6 +46,7 @@ export default function Rainfall({ rainfall }) {
 
   return (
     <>
+      <CommonHead title="年降水量の一覧 - 全国の暑さ指数一覧" />
       <Navbars />
 
       <Container className="w-75 mt-4">

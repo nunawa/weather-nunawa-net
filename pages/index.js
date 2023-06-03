@@ -2,6 +2,7 @@ import React from "react";
 import { Navbars } from "../components/Navbars";
 import { Col, Container, Row, Table } from "react-bootstrap";
 import { MongoClient } from "mongodb";
+import { CommonHead } from "../components/CommonHead";
 import Link from "next/link";
 
 export default function Home({
@@ -43,6 +44,7 @@ export default function Home({
 
   return (
     <div className="Home">
+      <CommonHead title="全国の暑さ指数一覧" />
       <Navbars />
 
       <Container className="mt-4">

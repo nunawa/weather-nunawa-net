@@ -2,12 +2,14 @@ import { MongoClient } from "mongodb";
 import dynamic from "next/dynamic";
 import Container from "react-bootstrap/Container";
 import { Navbars } from "../components/Navbars";
+import { CommonHead } from "../components/CommonHead";
 
 const Map = dynamic(() => import("../components/Map"), { ssr: false });
 
 export default function Wbgt({ wbgt }) {
   return (
     <>
+      <CommonHead title="暑さ指数 年間平均値の一覧 - 全国の暑さ指数一覧" />
       <Navbars />
 
       <Container className="w-75 mt-4">

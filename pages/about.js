@@ -1,9 +1,11 @@
 import Container from "react-bootstrap/Container";
 import { Navbars } from "../components/Navbars";
+import { CommonHead } from "../components/CommonHead";
 
 export const About = () => {
   return (
     <>
+      <CommonHead title="About - 全国の暑さ指数一覧" />
       <Navbars />
       <Container className="w-75 mt-4">
         全国約800地点の暑さ指数（WBGT）の統計を閲覧できます。
