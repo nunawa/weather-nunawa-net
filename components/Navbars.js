@@ -22,3 +22,5 @@ export const Navbars = () => {
     </Navbar>
   );
 };
+
+export default Navbars;
