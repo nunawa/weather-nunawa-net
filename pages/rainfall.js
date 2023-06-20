@@ -1,49 +1,12 @@
-import { TileLayer } from "@deck.gl/geo-layers";
-import { BitmapLayer, ColumnLayer } from "@deck.gl/layers";
-import { DeckGL } from "deck.gl";
 import { MongoClient } from "mongodb";
+import dynamic from "next/dynamic";
 import Container from "react-bootstrap/Container";
-import { Navbars } from "../components/Navbars";
 import { CommonHead } from "../components/CommonHead";
+import { Navbars } from "../components/Navbars";
+
+const Map3d = dynamic(() => import("../components/Map3d"), { ssr: false });
 
 export default function Rainfall({ rainfall }) {
-  const layer = new ColumnLayer({
-    data: rainfall,
-    diskResolution: 12,
-    radius: 5000,
-    extruded: true,
-    pickable: true,
-    elevationScale: 20,
-    getPosition: (d) => [d.lon, d.lat],
-    getFillColor: (d) => [
-      Math.floor(d.ave / 15),
-      30,
-      255 - Math.floor(d.ave / 15),
-      255,
-    ],
-    getLineColor: [0, 0, 0],
-    getElevation: (d) => d.ave,
-  });
-
-  const tile = new TileLayer({
-    data: "https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png",
-    minZoom: 0,
-    maxZoom: 19,
-    tileSize: 256,
-
-    renderSubLayers: (props) => {
-      const {
-        bbox: { west, south, east, north },
-      } = props.tile;
-
-      return new BitmapLayer(props, {
-        data: null,
-        image: props.data,
-        bounds: [west, south, east, north],
-      });
-    },
-  });
-
   return (
     <>
       <CommonHead title="年降水量の一覧 - 全国の暑さ指数一覧" />
@@ -58,22 +21,7 @@ export default function Rainfall({ rainfall }) {
         </div>
       </Container>
       <Container className="px-4">
-        <DeckGL
-          style={{ position: "relative", height: "70vh" }}
-          initialViewState={{
-            longitude: 135,
-            latitude: 35,
-            zoom: 5,
-            maxZoom: 19,
-            pitch: 70,
-            bearing: 20,
-          }}
-          layers={[tile, layer]}
-          getTooltip={({ object }) =>
-            object && `${object.name}\n ${object.ave}mm`
-          }
-          controller={{ touchRotate: true }}
-        />
+        <Map3d data={rainfall} />
       </Container>
 
       <Container className="mt-5 mb-3">

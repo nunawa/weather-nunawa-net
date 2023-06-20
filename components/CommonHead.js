@@ -24,3 +24,5 @@ export const CommonHead = ({ title = "全国の暑さ指数一覧" }) => {
     </Head>
   );
 };
+
+export default CommonHead;
