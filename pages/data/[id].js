@@ -13,7 +13,6 @@ import {
   Label,
   BarChart,
   Bar,
-  Legend,
 } from "recharts";
 import { MongoClient } from "mongodb";
 import { CommonHead } from "../../components/CommonHead";
@@ -203,7 +202,7 @@ export const getStaticPaths = async () => {
           ],
           id: { $ne: "50066" },
         },
-        { projection: { _id: 0, id: 1 } }
+        { projection: { _id: 0, id: 1 } },
       )
       .toArray();
     client.close();
@@ -235,7 +234,7 @@ export const getStaticProps = async (context) => {
       .collection("wbgt")
       .findOne(
         { id: id },
-        { projection: { _id: 0, pref: 1, name: 1, max_min: 1 } }
+        { projection: { _id: 0, pref: 1, name: 1, max_min: 1 } },
       );
     const amedas = await client
       .db("weather")
@@ -251,7 +250,7 @@ export const getStaticProps = async (context) => {
             monthly: 1,
             yearly: { temp: 1, rainfall: 1 },
           },
-        }
+        },
       );
     client.close();
 

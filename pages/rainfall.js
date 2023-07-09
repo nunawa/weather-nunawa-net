@@ -51,7 +51,7 @@ export async function getStaticProps() {
             lon: 1,
             yearly: { rainfall: 1 },
           },
-        }
+        },
       )
       .toArray();
     client.close();

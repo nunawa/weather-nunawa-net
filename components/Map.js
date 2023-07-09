@@ -54,7 +54,7 @@ const getCompoList = (data) => {
           <br />
           {String(wbgt)}
         </Popup>
-      </Circle>
+      </Circle>,
     );
   }
 

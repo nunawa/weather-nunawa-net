@@ -42,7 +42,7 @@ export async function getStaticProps() {
       .collection("wbgt")
       .find(
         {},
-        { projection: { _id: 0, id: 1, name: 1, lat: 1, lon: 1, ave: 1 } }
+        { projection: { _id: 0, id: 1, name: 1, lat: 1, lon: 1, ave: 1 } },
       )
       .toArray();
 
