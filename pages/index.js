@@ -158,7 +158,7 @@ export async function getStaticProps() {
             name: 1,
             ave: 1,
           },
-        }
+        },
       )
       .sort({ ave: 1 })
       .limit(5)
@@ -177,7 +177,7 @@ export async function getStaticProps() {
             name: 1,
             ave: 1,
           },
-        }
+        },
       )
       .sort({ ave: -1 })
       .limit(5)
@@ -196,7 +196,7 @@ export async function getStaticProps() {
             name: 1,
             yearly: { temp: 1 },
           },
-        }
+        },
       )
       .sort({ "yearly.temp": 1 })
       .limit(5)
@@ -215,7 +215,7 @@ export async function getStaticProps() {
             name: 1,
             yearly: { temp: 1 },
           },
-        }
+        },
       )
       .sort({ "yearly.temp": -1 })
       .limit(5)
@@ -234,7 +234,7 @@ export async function getStaticProps() {
             name: 1,
             yearly: { rainfall: 1 },
           },
-        }
+        },
       )
       .sort({ "yearly.rainfall": 1 })
       .limit(5)
@@ -253,7 +253,7 @@ export async function getStaticProps() {
             name: 1,
             yearly: { rainfall: 1 },
           },
-        }
+        },
       )
       .sort({ "yearly.rainfall": -1 })
       .limit(5)

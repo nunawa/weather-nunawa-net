@@ -51,7 +51,7 @@ export async function getStaticProps() {
             lon: 1,
             yearly: { temp: 1 },
           },
-        }
+        },
       )
       .toArray();
 
