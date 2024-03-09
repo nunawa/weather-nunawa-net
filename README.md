@@ -1,6 +1,7 @@
 # weather-nunawa-net
 
 [![Lint and Format](https://github.com/nunawa/weather-nunawa-net/actions/workflows/lint-and-format.yml/badge.svg)](https://github.com/nunawa/weather-nunawa-net/actions/workflows/lint-and-format.yml)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/aed1af11-5b5e-4f30-9b90-69239f0c5d33/deploy-status)](https://app.netlify.com/sites/weather-nunawa-net/deploys)
 
 A website that visualizes Wet Bulb Globe Temperature (WBGT) in Japan on maps and graphs
 
